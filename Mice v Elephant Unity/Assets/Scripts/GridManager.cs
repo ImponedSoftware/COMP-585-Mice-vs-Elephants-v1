@@ -10,24 +10,15 @@ public class GridManager : MonoBehaviour
     private int coloum;
 
     private float tileSpace = 1.1f;
-
-    
+  
     // Create a new script call Zoom or something for modualtions.
     private Camera camera;
-
-    private float orthographicSizeMin = 2f;
-
-    private float orthographicSizeMax = 20f;
-
-    private float zoomSpeed = 1f;
 
     void Start()
     {
         row = InputInGameData.row;
         coloum = InputInGameData.coloum;
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
-
-        Debug.Log(camera.orthographic);
 
         initGrid();
 
@@ -37,18 +28,7 @@ public class GridManager : MonoBehaviour
 
     private void Update()
     {
-        if (camera.orthographic)
-        {
-            if (Input.GetAxis("Mouse ScrollWheel") < 0)
-            {
-                camera.orthographicSize += zoomSpeed;
-            }
-            if (Input.GetAxis("Mouse ScrollWheel") > 0)
-            {
-                camera.orthographicSize -= zoomSpeed;
-            }
-            camera.orthographicSize = Mathf.Clamp(camera.orthographicSize, orthographicSizeMin, orthographicSizeMax);
-        }
+ 
     }
 
     private void initGrid()

@@ -56,13 +56,14 @@
     <Compile Include="Assets\Scripts\AnimalScriptLogic\Animal.cs" />
     <Compile Include="Assets\Scripts\GameHandler.cs" />
     <Compile Include="Assets\Scripts\Test.cs" />
+    <Compile Include="Assets\Scripts\AnimalScriptLogic\Elephant.cs" />
+    <Compile Include="Assets\Scripts\ZoomScript.cs" />
     <Compile Include="Assets\Scripts\CamaraOnGrass.cs" />
+    <Compile Include="Assets\Scripts\AnimalScriptLogic\Mouse.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\SceneChanger.cs" />
     <Compile Include="Assets\Scripts\GridManager.cs" />
     <Compile Include="Assets\Scripts\InputInGameData.cs" />
-    <Compile Include="Assets\Scripts\AnimalScriptLogic\Mouse.cs" />
-    <Compile Include="Assets\Scripts\AnimalScriptLogic\Elephant.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
