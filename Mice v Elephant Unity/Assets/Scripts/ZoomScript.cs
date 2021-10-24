@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Windows.Input;
 
 public class ZoomScript : MonoBehaviour
 {
@@ -10,9 +10,9 @@ public class ZoomScript : MonoBehaviour
 
     private float orthographicSizeMin = 2f;
 
-    private float orthographicSizeMax = 20f;
+    private float orthographicSizeMax = 80f;
 
-    private float zoomSpeed = 1f;
+    private float zoomSpeed = 5f;
 
     private void Start()
     {
@@ -34,4 +34,5 @@ public class ZoomScript : MonoBehaviour
             camera.orthographicSize = Mathf.Clamp(camera.orthographicSize, orthographicSizeMin, orthographicSizeMax);
         }
     }
+
 }

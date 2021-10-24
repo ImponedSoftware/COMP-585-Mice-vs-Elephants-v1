@@ -9,6 +9,7 @@ public class InputInGameData : MonoBehaviour
     public InputField ColumnInput, RowInput, NumberOfMiceInput, NumberOfElephantInput, StrikeDistanceInput;
 
     public static int row, coloum;
+    public bool GridSizeChangeRequested = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,4 +34,5 @@ public class InputInGameData : MonoBehaviour
 
         Debug.Log($"{row} {coloum}");
     }
+    
 }
