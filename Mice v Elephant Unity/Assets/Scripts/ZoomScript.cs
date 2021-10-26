@@ -10,9 +10,9 @@ public class ZoomScript : MonoBehaviour
 
     private float orthographicSizeMin = 2f;
 
-    private float orthographicSizeMax = 80f;
+    private float orthographicSizeMax = 20f;
 
-    private float zoomSpeed = 5f;
+    private float zoomSpeed = 2f;
 
     private void Start()
     {

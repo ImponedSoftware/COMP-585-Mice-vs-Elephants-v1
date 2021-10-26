@@ -22,10 +22,10 @@ public class GridManager : MonoBehaviour
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
 
         // Where camera is within scene
-        camera.transform.position = new Vector3(0, 0, camera.transform.position.z);
+        camera.transform.position = new Vector3(_row/2, -_coloum/2, camera.transform.position.z);
 
         // How far out camera will zoom
-        camera.orthographicSize = 20;
+        camera.orthographicSize = 10;
 
         initGrid(_row, _coloum);
     }
@@ -48,7 +48,9 @@ public class GridManager : MonoBehaviour
 
                 float posX = j * tileSpace;
                 float posY = i * -tileSpace;
-                tile.transform.position = new Vector2(posX, posY);
+                tile.transform.position = new Vector3(posX, posY, 1);
+
+                Debug.Log(tile.transform.position);
             }
         }
         
@@ -58,7 +60,7 @@ public class GridManager : MonoBehaviour
         float gridH = row * tileSpace;
 
         // Spacing from each grid tile. Renders empty tile/space.
-        transform.position = new Vector2(-gridW / 2 + tileSpace / 2, gridH / 2 - tileSpace / 2);
+       // transform.position = new Vector2(-gridW / 2 + tileSpace / 2, gridH / 2 - tileSpace / 2);
 
         Debug.Log("Finsih");
         Debug.Log(camera.transform.position);
