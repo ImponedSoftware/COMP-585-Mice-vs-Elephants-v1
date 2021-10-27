@@ -67,9 +67,9 @@ public class GridManager : MonoBehaviour
 
     }
 
-    public void updateGridSize() 
+    /*public void updateGridSize() 
     {
         initGrid(4, 4);
-    }
+    }*/
 
 }
