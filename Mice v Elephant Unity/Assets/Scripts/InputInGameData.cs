@@ -8,7 +8,7 @@ public class InputInGameData : MonoBehaviour
     public Button playButton;
     public InputField ColumnInput, RowInput, NumberOfMiceInput, NumberOfElephantInput, StrikeDistanceInput;
 
-    public static int row, coloum;
+    public static int row, coloum, numberOfElephants, numberOfMice;
     public bool GridSizeChangeRequested = false;
     // Start is called before the first frame update
     void Start()
@@ -31,6 +31,8 @@ public class InputInGameData : MonoBehaviour
 
         int.TryParse(RowInput.text, out row);
         int.TryParse(ColumnInput.text, out coloum);
+
+        InputInGameData.numberOfElephants = int.Parse(NumberOfElephantInput.text);
 
         Debug.Log($"{row} {coloum}");
     }

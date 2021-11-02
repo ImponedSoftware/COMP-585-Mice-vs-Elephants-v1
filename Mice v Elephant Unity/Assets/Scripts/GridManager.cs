@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class GridManager : MonoBehaviour
@@ -9,16 +10,23 @@ public class GridManager : MonoBehaviour
     private int _row;
 
     private int _coloum;
+    private int _numOfElephants;
 
+    [SerializeField]
     private float tileSpace = 1.1f;
-  
+
+    public InputField XInput, YInput;
+    public int tempX, tempY;
     // Create a new script call Zoom or something for modualtions.
     private Camera camera;
-    
+    private List<GameObject> elephants = new List<GameObject>();
+
+
     void Start()
     {
         _row = InputInGameData.row;
         _coloum = InputInGameData.coloum;
+        _numOfElephants = InputInGameData.numberOfElephants;
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
 
         // Where camera is within scene
@@ -27,12 +35,53 @@ public class GridManager : MonoBehaviour
         // How far out camera will zoom
         camera.orthographicSize = 10;
 
+        // put grid
         initGrid(_row, _coloum);
+
+        Debug.Log("After Init Grid");
+
+
+        // put elephants on screen
+        moveElephantsRandomly();
+
+        Debug.Log("After Move Elephant");
+
     }
 
     private void Update()
     {
         
+    }
+
+    private void moveElephantsRandomly() 
+    {
+        System.Random random = new System.Random();
+
+        GameObject refTile = (GameObject)Instantiate(Resources.Load("Elephant 1"));
+
+        Debug.Log("Num of Elephant: " + _numOfElephants);
+        
+
+        for(int i = 0; i < _numOfElephants; i++)
+        {
+            
+            Debug.Log("In moveElephants!");
+
+            // GameObject elephantTile = (GameObject)Instantiate(refTile, transform);
+
+            // elephants.Add(elephantTile);
+
+            int randomX = random.Next(0, _row);
+            int randomY = random.Next(0, _coloum);
+            Debug.Log($"X: {randomX} --- Y: {randomY}");
+
+            GameObject elephantTile = (GameObject)Instantiate(refTile, transform);
+            elephants.Add(elephantTile);
+            elephants[i].transform.position = new Vector3(randomX * tileSpace, randomY * -tileSpace, 1);
+
+        }
+        Destroy(refTile);
+
     }
 
     private void initGrid(int row, int col)
@@ -50,26 +99,10 @@ public class GridManager : MonoBehaviour
                 float posY = i * -tileSpace;
                 tile.transform.position = new Vector3(posX, posY, 1);
 
-                Debug.Log(tile.transform.position);
+                //Debug.Log(tile.transform.position);
             }
         }
-        
         Destroy(refTile);
-
-        float gridW = col * tileSpace;
-        float gridH = row * tileSpace;
-
-        // Spacing from each grid tile. Renders empty tile/space.
-       // transform.position = new Vector2(-gridW / 2 + tileSpace / 2, gridH / 2 - tileSpace / 2);
-
-        Debug.Log("Finsih");
-        Debug.Log(camera.transform.position);
-
     }
-
-    /*public void updateGridSize() 
-    {
-        initGrid(4, 4);
-    }*/
 
 }
