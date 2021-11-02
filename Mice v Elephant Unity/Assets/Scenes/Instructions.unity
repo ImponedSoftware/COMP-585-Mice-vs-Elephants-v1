@@ -310,7 +310,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -120}
+  m_AnchoredPosition: {x: 0, y: -316.8}
   m_SizeDelta: {x: 441.3931, y: 80.3988}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &913095800
@@ -599,6 +599,104 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1549004021}
   m_CullTransparentMesh: 1
+--- !u!1 &1592485794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1592485795}
+  - component: {fileID: 1592485797}
+  - component: {fileID: 1592485796}
+  m_Layer: 5
+  m_Name: InstructionText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1592485795
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592485794}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2058451530}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 10.7729, y: -42.4305}
+  m_SizeDelta: {x: 1133.7014, y: 483.9805}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1592485796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592485794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 23
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 1
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: "It is common knowledge that elephants are deathly afraid of mice. What
+    is not so common knowledge is the reason why. Clearly it can't be that the elephant
+    is afraid of stepping on the mouse as the mouse cannot, in any way, pose a risk
+    to the substantially larger mammal in such an encounter. Some argue that the
+    reason is that the elephant is afraid that the mouse will go inside its trunk.
+    This is ridiculous because in one simple puff the elephant could eject the mouse
+    for several hundred yards. In fact, this would seem the\r perfect way to deal
+    with mice: when they approach, simply snort them up gently and then blow them
+    out as far as you can. Multiple mice could be handled simultaneously. Heck, the
+    elephants could set up competitions for distance or quantity.\r\n\r\nThe real
+    reason is that mice have a strong taste for elephant flesh. Although there have
+    been no visual recordings of mice attacking elephants as a tasty snack it does
+    in fact happen. What's more surprising is that the mice have a very strong appetite
+    for elephants. It only requires two mice to devour a single adult male elephant
+    (clearly competitions involving quantity is not a good idea for the elephants).
+    It's not a pretty sight either. Faced against the voracious feeding frenzy of
+    a pair of mice the elephant has no hope\r of survival. A single mouse cannot
+    take on an elephant and survive so they must coordinate their attack. The coordination
+    is quite simple.\r\n\r\nUsing a multithreaded application we are simulating mice
+    hunting elephants in the wild.\n"
+--- !u!222 &1592485797
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592485794}
+  m_CullTransparentMesh: 1
 --- !u!1 &1654342268
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,6 +833,7 @@ RectTransform:
   m_Children:
   - {fileID: 1549004022}
   - {fileID: 913095799}
+  - {fileID: 1592485795}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
