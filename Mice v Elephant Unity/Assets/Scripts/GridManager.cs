@@ -87,6 +87,7 @@ public class GridManager : MonoBehaviour
     private void initGrid(int row, int col)
     {
 
+        // test
         GameObject refTile = (GameObject)Instantiate(Resources.Load("Grass"));
 
         for (int i = 0; i < row; i++)
