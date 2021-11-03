@@ -11,6 +11,7 @@ public class GridManager : MonoBehaviour
 
     private int _coloum;
     private int _numOfElephants;
+    private int _numOfMice;
 
     [SerializeField]
     private float tileSpace = 1.1f;
@@ -20,6 +21,7 @@ public class GridManager : MonoBehaviour
     // Create a new script call Zoom or something for modualtions.
     private Camera camera;
     private List<GameObject> elephants = new List<GameObject>();
+    private List<GameObject> mice = new List<GameObject>();
 
 
     void Start()
@@ -27,6 +29,7 @@ public class GridManager : MonoBehaviour
         _row = InputInGameData.row;
         _coloum = InputInGameData.coloum;
         _numOfElephants = InputInGameData.numberOfElephants;
+        _numOfMice = InputInGameData.numberOfMice;
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
 
         // Where camera is within scene
@@ -43,6 +46,7 @@ public class GridManager : MonoBehaviour
 
         // put elephants on screen
         moveElephantsRandomly();
+        moveMiceRandomly();
 
         Debug.Log("After Move Elephant");
 
@@ -61,12 +65,9 @@ public class GridManager : MonoBehaviour
 
         Debug.Log("Num of Elephant: " + _numOfElephants);
         
-
         for(int i = 0; i < _numOfElephants; i++)
         {
             
-            Debug.Log("In moveElephants!");
-
             // GameObject elephantTile = (GameObject)Instantiate(refTile, transform);
 
             // elephants.Add(elephantTile);
@@ -78,6 +79,33 @@ public class GridManager : MonoBehaviour
             GameObject elephantTile = (GameObject)Instantiate(refTile, transform);
             elephants.Add(elephantTile);
             elephants[i].transform.position = new Vector3(randomX * tileSpace, randomY * -tileSpace, 1);
+
+        }
+        Destroy(refTile);
+
+    }
+
+    private void moveMiceRandomly() 
+    {
+        System.Random random = new System.Random();
+
+        GameObject refTile = (GameObject)Instantiate(Resources.Load("mouseart"));
+
+        
+        for(int i = 0; i < _numOfMice; i++)
+        {
+            
+            // GameObject elephantTile = (GameObject)Instantiate(refTile, transform);
+
+            // elephants.Add(elephantTile);
+
+            int randomX = random.Next(0, _row);
+            int randomY = random.Next(0, _coloum);
+            Debug.Log($"X: {randomX} --- Y: {randomY}");
+
+            GameObject miceTile = (GameObject)Instantiate(refTile, transform);
+            mice.Add(miceTile);
+            mice[i].transform.position = new Vector3(randomX * tileSpace, randomY * -tileSpace, 1);
 
         }
         Destroy(refTile);

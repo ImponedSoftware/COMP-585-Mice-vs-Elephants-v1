@@ -33,6 +33,7 @@ public class InputInGameData : MonoBehaviour
         int.TryParse(ColumnInput.text, out coloum);
 
         InputInGameData.numberOfElephants = int.Parse(NumberOfElephantInput.text);
+        InputInGameData.numberOfMice = int.Parse(NumberOfMiceInput.text);
 
         Debug.Log($"{row} {coloum}");
     }

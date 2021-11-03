@@ -49,6 +49,7 @@ namespace Assets.Scripts.AnimalScriptLogic
 
                 elephantTurnFlag = !elephantTurnFlag;
                 //Print this or this is where we call the sprite to move to
+                
             }
             //
         }
