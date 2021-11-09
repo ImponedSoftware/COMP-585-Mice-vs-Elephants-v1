@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
-using System.Collections;
+using UnityEngine;
+
 
 namespace Assets.Scripts.AnimalScriptLogic
 {
@@ -49,7 +47,8 @@ namespace Assets.Scripts.AnimalScriptLogic
 
                 elephantTurnFlag = !elephantTurnFlag;
                 //Print this or this is where we call the sprite to move to
-                
+                Thread.Sleep(2000);
+                SyncCurrentPosToScenePos(this);
             }
             //
         }
@@ -87,6 +86,7 @@ namespace Assets.Scripts.AnimalScriptLogic
 
             CheckBounds();
         }
+
         private void isElephantEaten()
         {
             lock (elephantList) // MAYBE lock on the this

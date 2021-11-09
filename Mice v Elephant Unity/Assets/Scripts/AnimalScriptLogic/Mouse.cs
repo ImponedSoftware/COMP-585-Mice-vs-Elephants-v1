@@ -27,10 +27,14 @@ namespace Assets.Scripts.AnimalScriptLogic
 
                 MoveAround();
                 //print or set the mouse sprite at the spefic location on the graph.
+                Thread.Sleep(2000);
+                SyncCurrentPosToScenePos(this);
             }
             // This is where mouse ternminates.
         }
   
+
+
         protected override void MoveAround()
         {
             Elephant closestElphant = getClosestElephant();

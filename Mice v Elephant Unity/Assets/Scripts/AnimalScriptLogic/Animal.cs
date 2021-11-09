@@ -89,6 +89,25 @@ namespace Assets.Scripts.AnimalScriptLogic
                 }
             }
         }
+
+        protected void SyncCurrentPosToScenePos(Elephant animal) 
+        {
+            int x = this.point.X;
+            int y = this.point.Y;
+            int currentElephantIndex = elephantList.IndexOf(animal);
+
+            GridManager.elephants[currentElephantIndex].transform.position = new Vector3(x * GridManager.tileSpace, y * -GridManager.tileSpace, 1);
+        }
+
+        protected void SyncCurrentPosToScenePos(Mouse animal) 
+        {
+            int x = this.point.X;
+            int y = this.point.Y;
+            int currentMouseIndex = mouseList.IndexOf(animal);
+
+            GridManager.mice[currentMouseIndex].transform.position = new Vector3(x * GridManager.tileSpace, y * -GridManager.tileSpace, 1);
+        }
+
         protected Point getRandomPoint()
         {
             System.Random rand = new System.Random();
