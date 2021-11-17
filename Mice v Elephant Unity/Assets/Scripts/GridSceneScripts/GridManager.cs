@@ -54,7 +54,7 @@ public class GridManager : MonoBehaviour
 
     private void Update()
     {
-        
+         
     }
 
 
@@ -82,7 +82,7 @@ public class GridManager : MonoBehaviour
             elephants[i].transform.position = new Vector3(randomX * tileSpace, randomY * -tileSpace, 1);
 
         }
-        Destroy(refTile);
+
 
     }
 

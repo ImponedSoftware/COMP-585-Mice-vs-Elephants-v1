@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Assets.Scripts.AnimalScriptLogic
 {
-    abstract class Animal : MonoBehaviour
+    abstract class Animal
     {
         public Point point;
 
@@ -106,6 +106,24 @@ namespace Assets.Scripts.AnimalScriptLogic
             int currentMouseIndex = mouseList.IndexOf(animal);
 
             GridManager.mice[currentMouseIndex].transform.position = new Vector3(x * GridManager.tileSpace, y * -GridManager.tileSpace, 1);
+        }
+
+        protected void deleteMouse(Mouse mouse)
+        {
+            this.mouseList.Remove(mouse);
+
+            int currentMouseIndex = mouseList.IndexOf(mouse);
+
+            GameObject.Destroy(GridManager.mice[currentMouseIndex]);
+        }
+
+        protected void deleteelephant(Elephant elephant)
+        {
+            this.elephantList.Remove(elephant);
+
+            int currentMouseIndex = elephantList.IndexOf(elephant);
+
+            GameObject.Destroy(GridManager.elephants[currentMouseIndex]); 
         }
 
         protected Point getRandomPoint()

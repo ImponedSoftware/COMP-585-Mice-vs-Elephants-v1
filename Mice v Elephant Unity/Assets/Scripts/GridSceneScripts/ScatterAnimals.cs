@@ -14,6 +14,8 @@ public class ScatterAnimals : MonoBehaviour
     }
     public void scatterAnimals()
     {
+        Debug.Log("LOL");
+
         System.Random random = new System.Random();
 
         // Count is the same thing as elephants.size() in Java
