@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,9 +21,12 @@ public class GridManager : MonoBehaviour
     public int tempX, tempY;
     // Create a new script call Zoom or something for modualtions.
     private Camera camera;
-    public static List<GameObject> elephants = new List<GameObject>();
-    public static List<GameObject> mice = new List<GameObject>();
+    public static List<GameObject> elephants;
+    public static List<GameObject> mice;
 
+    public static Vector3[,] gameObjRef;
+
+    public static TextMeshProUGUI simRound;
 
     void Start()
     {
@@ -35,6 +39,8 @@ public class GridManager : MonoBehaviour
         // Where camera is within scene
         camera.transform.position = new Vector3(_row/2, -_coloum/2, camera.transform.position.z);
 
+        simRound = GameObject.Find("RoundText").GetComponentInChildren<TextMeshProUGUI>();
+
         // How far out camera will zoom
         camera.orthographicSize = 10;
 
@@ -43,7 +49,8 @@ public class GridManager : MonoBehaviour
 
         Debug.Log("After Init Grid");
 
-
+        elephants = new List<GameObject>();
+        mice = new List<GameObject>();
         // put elephants on screen
         moveElephantsRandomly();
         moveMiceRandomly();
@@ -82,7 +89,7 @@ public class GridManager : MonoBehaviour
             elephants[i].transform.position = new Vector3(randomX * tileSpace, randomY * -tileSpace, 1);
 
         }
-
+        Destroy(refTile);
 
     }
 
@@ -116,6 +123,8 @@ public class GridManager : MonoBehaviour
     private void initGrid(int row, int col)
     {
 
+        gameObjRef = new Vector3[row,col];
+
         // test
         GameObject refTile = (GameObject)Instantiate(Resources.Load("Grass"));
 
@@ -129,10 +138,66 @@ public class GridManager : MonoBehaviour
                 float posY = i * -tileSpace;
                 tile.transform.position = new Vector3(posX, posY, 1);
 
-                //Debug.Log(tile.transform.position);
+                gameObjRef[j, i] = tile.transform.position;
             }
         }
         Destroy(refTile);
+    }
+
+    public static void SyncCurrentPosToScenePos(int pointX, int pointY, int currentElephantIndex)
+    {
+       // Debug.Log(GridManager.elephants[currentElephantIndex].transform.position);
+      // GridManager.elephants[currentElephantIndex].transform.position = new Vector3(pointX * GridManager.tileSpace, pointY * -GridManager.tileSpace, 1);
+        
+        Vector3 pos = GridManager.elephants[currentElephantIndex].transform.position;
+                 if (pointX >= GridManager.gameObjRef.GetLength(0) - 1)
+                {
+                    pointX = GridManager.gameObjRef.GetLength(0) - 1;
+                }
+
+                if (pointY >= GridManager.gameObjRef.GetLength(1) - 1)
+                {
+                    pointY = GridManager.gameObjRef.GetLength(1) - 1;
+                }
+
+
+        
+            Vector3 fe = (gameObjRef[pointX, pointY]);
+
+            GridManager.elephants[currentElephantIndex].transform.position = new Vector3(fe.x, fe.y, fe.z);
+
+              
+    }
+
+    public static void SyncCurrentPosToScenePosMice(int pointX, int pointY, int currentElephantIndex)
+    {
+        /*    Debug.Log(GridManager.mice[currentElephantIndex].transform.position);
+            GridManager.mice[currentElephantIndex].transform.position = new Vector3(pointX * GridManager.tileSpace, pointY * -GridManager.tileSpace, 1);*/
+
+        Vector3 pos = mice[currentElephantIndex].transform.position;
+        if (pointX >= gameObjRef.GetLength(0) - 1)
+        {
+            pointX = gameObjRef.GetLength(0) - 1;
+        }
+
+        if (pointY >= gameObjRef.GetLength(1) - 1)
+        {
+            pointY = gameObjRef.GetLength(1) - 1;
+        }
+
+
+
+        Vector3 fe = (gameObjRef[pointX, pointY]);
+
+        mice[currentElephantIndex].transform.position = new Vector3(fe.x, fe.y, fe.z);
+    }
+
+
+
+    public static void SetSimulationRoundText(int round)
+    {
+      
+        simRound.text = "Simulation Round: " + round;
     }
 
 }

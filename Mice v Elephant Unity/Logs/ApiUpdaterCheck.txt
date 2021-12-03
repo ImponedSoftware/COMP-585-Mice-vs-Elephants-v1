@@ -78,3 +78,43 @@ C# parse time         : 294ms
 candidates check time : 41ms
 console write time    : 0ms
 
+[api-updater (non-obsolete-error-filter)] 11/18/2021 12:27:18 PM : Starting C:/Program Files/Unity/Hub/Editor/2020.3.12f1/Editor/2020.3.18f1/Editor/Data/Tools/ScriptUpdater/APIUpdater.NonObsoleteApiUpdaterDetector.exe
+[api-updater (non-obsolete-error-filter)] 
+----------------------------------
+jit/startup time      : 1936.0413ms
+moved types parse time: 74ms
+candidates parse time : 1ms
+C# parse time         : 520ms
+candidates check time : 45ms
+console write time    : 1ms
+
+[api-updater (non-obsolete-error-filter)] 12/1/2021 10:36:57 PM : Starting C:/Program Files/Unity/Hub/Editor/2020.3.12f1/Editor/2020.3.18f1/Editor/Data/Tools/ScriptUpdater/APIUpdater.NonObsoleteApiUpdaterDetector.exe
+[api-updater (non-obsolete-error-filter)] 
+----------------------------------
+jit/startup time      : 2259.9663ms
+moved types parse time: 67ms
+candidates parse time : 1ms
+C# parse time         : 1213ms
+candidates check time : 108ms
+console write time    : 34ms
+
+[api-updater (non-obsolete-error-filter)] 12/2/2021 2:38:21 AM : Starting C:/Program Files/Unity/Hub/Editor/2020.3.12f1/Editor/2020.3.18f1/Editor/Data/Tools/ScriptUpdater/APIUpdater.NonObsoleteApiUpdaterDetector.exe
+[api-updater (non-obsolete-error-filter)] 
+----------------------------------
+jit/startup time      : 282.9643ms
+moved types parse time: 68ms
+candidates parse time : 1ms
+C# parse time         : 277ms
+candidates check time : 91ms
+console write time    : 0ms
+
+[api-updater (non-obsolete-error-filter)] 12/2/2021 5:28:00 AM : Starting C:/Program Files/Unity/Hub/Editor/2020.3.12f1/Editor/2020.3.18f1/Editor/Data/Tools/ScriptUpdater/APIUpdater.NonObsoleteApiUpdaterDetector.exe
+[api-updater (non-obsolete-error-filter)] 
+----------------------------------
+jit/startup time      : 201.2471ms
+moved types parse time: 67ms
+candidates parse time : 2ms
+C# parse time         : 279ms
+candidates check time : 42ms
+console write time    : 0ms
+

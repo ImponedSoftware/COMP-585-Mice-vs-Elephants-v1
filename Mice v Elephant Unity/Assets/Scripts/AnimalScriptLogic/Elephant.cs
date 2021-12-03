@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Threading;
 using UnityEngine;
 
@@ -11,15 +13,15 @@ namespace Assets.Scripts.AnimalScriptLogic
         private bool running;
         private bool elephantTurnFlag;
 
-        public Elephant(List<Mouse> mouseList, List<Elephant> elephantList, object _objLock, int elephantsAvailable, int RowBound, int ColoumBound, int StrikeDistance) : base(mouseList, elephantList, _objLock, elephantsAvailable, RowBound, ColoumBound, StrikeDistance)
+        public Elephant(List<Mouse> mouseList, List<Elephant> elephantList, object _objLock, int elephantsAvailable, int RowBound, int ColoumBound, int StrikeDistance, Point point) : base(mouseList, elephantList, _objLock, elephantsAvailable, RowBound, ColoumBound, StrikeDistance, point)
         {
-            do
-            { // look if you can put a flag bool and don't need to check twice;
-                if (isOccupied())
-                {
-                    point = getRandomPoint();
-                }
-            } while (isOccupied());
+            /*  do
+              { // look if you can put a flag bool and don't need to check twice;
+                  if (isOccupied())
+                  {
+                      point = getRandomPoint();
+                  }
+              } while (isOccupied());*/
 
         }
         protected override void Run()
@@ -29,41 +31,78 @@ namespace Assets.Scripts.AnimalScriptLogic
 
             while (running)
             {
+                Debug.Log(this.point + " BEginnign EL");
                 Barrier();
+                Debug.Log("WERE fuckign runngin");
 
                 if (running)
                 {
                     if (elephantTurnFlag)
                     {
                         MoveAround();
-
-                        if (isOccupied())
-                        {
-                            point = moveInRandomAdijantSquare();
-
-                        } while (isOccupied()) ;
+                        /*
+                                                if (isOccupied())
+                                                {
+                                                    Debug.Log("INNNN");
+                                                    point = moveInRandomAdijantSquare();
+                                                    Debug.Log(point + " s");
+                                                } while (isOccupied()) ;*/
                     }
                 }
 
                 elephantTurnFlag = !elephantTurnFlag;
                 //Print this or this is where we call the sprite to move to
-                Thread.Sleep(2000);
+                Thread.Sleep(1000);
+                Debug.Log(this.point + " El");
                 SyncCurrentPosToScenePos(this);
             }
-            //
+
         }
 
         protected override void Barrier()
         {
-            lock (_objLock)
+            Monitor.Enter(_objLock);
             {
+                Debug.Log("Elphant111");
                 if (amountOfMiceOnSquare() >= 2)
                 {
                     isElephantEaten();
                     running = false;
                     return;
                 }
+
+                Interlocked.Increment(ref allSqawnedObjects);
+
+                Debug.Log(allSqawnedObjects);
+                Debug.Log((Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantList.Count) + " pghkljoghkj");
+
+                if ((Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantList.Count))
+                {
+                    Monitor.PulseAll(_objLock);
+                    Interlocked.Increment(ref roundTurn);
+                    Interlocked.Exchange(ref allSqawnedObjects, 0);
+                }
+                else
+                {
+                    bool interrupted = false;
+                    try
+                    {
+                        while (!interrupted)
+                        {
+                            Debug.Log(this.thread.ManagedThreadId);
+                            Monitor.Wait(_objLock);
+                            interrupted = true;
+                        }
+                    }
+                    catch (ThreadInterruptedException err)
+                    {
+                        TextWriter errorWriter = Console.Error;
+                        errorWriter.WriteLine(err.Message);
+                        return;
+                    }
+                }
             }
+            Monitor.Exit(_objLock);
         }
 
         protected override void MoveAround()
@@ -81,10 +120,12 @@ namespace Assets.Scripts.AnimalScriptLogic
             }
             else
             {
+                Debug.Log(point + " INNN");
                 point = moveInRandomAdijantSquare();
+                Debug.Log(point + " OUt");
             }
-
-            CheckBounds();
+            Debug.Log("OMG ITS WORKING");
+            //CheckBounds();
         }
 
         private void isElephantEaten()

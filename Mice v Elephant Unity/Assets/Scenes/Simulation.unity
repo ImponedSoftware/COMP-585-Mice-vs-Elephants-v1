@@ -455,7 +455,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df8a40bf43d5117458a7c4e04b28cd5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  elphant: []
+  elephantObjects: []
+  miceObject: []
+  strikeDistance: 0
+  numberOElephants: 0
+  numberOfMouse: 0
+  rowBound: 0
+  coloumBound: 0
+  startButton: {fileID: 0}
+  scatterButton: {fileID: 0}
 --- !u!4 &233079413
 Transform:
   m_ObjectHideFlags: 0
@@ -974,8 +982,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 233079412}
-        m_TargetAssemblyTypeName: StartSimulation, Assembly-CSharp
-        m_MethodName: lol
+        m_TargetAssemblyTypeName: Assets.Scripts.AnimalScriptLogic.StartSimulation,
+          Assembly-CSharp
+        m_MethodName: startSimulation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

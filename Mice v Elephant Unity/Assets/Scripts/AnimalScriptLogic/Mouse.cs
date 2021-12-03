@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading;
 using System.Drawing;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Scripts.AnimalScriptLogic
 {
     class Mouse : Animal
     {
-        public Mouse(List<Mouse> mouseList, List<Elephant> elephantList, object _objLock, int elephantsAvailable, int RowBound, int ColoumBound, int StrikeDistance) : base(mouseList, elephantList, _objLock, elephantsAvailable, RowBound, ColoumBound, StrikeDistance)
+        public Mouse(List<Mouse> mouseList, List<Elephant> elephantList, object _objLock, int elephantsAvailable, int RowBound, int ColoumBound, int StrikeDistance, Point point) : base(mouseList, elephantList, _objLock, elephantsAvailable, RowBound, ColoumBound, StrikeDistance, point)
         {
       
         }
@@ -18,16 +19,18 @@ namespace Assets.Scripts.AnimalScriptLogic
 
         protected override void Run()
         {
-            while((Volatile.Read(ref elephantsAvailable) > 0))
+            Debug.Log("WERE fuckign runngin inside asdasdasd");
+            while ((Interlocked.CompareExchange(ref elephantsAvailable, 0, 0)) > 0)
             {
                 Barrier();
-
-                if ((Volatile.Read(ref elephantsAvailable) > 0))
+                Debug.Log("WERE fuckign runngin inside mouse");
+                if ((Interlocked.CompareExchange(ref elephantsAvailable, 0, 0)) <= 0)
                     break;
 
                 MoveAround();
                 //print or set the mouse sprite at the spefic location on the graph.
-                Thread.Sleep(2000);
+                Thread.Sleep(1000);
+                Debug.Log(this.point + " MMOO");
                 SyncCurrentPosToScenePos(this);
             }
             // This is where mouse ternminates.
@@ -59,7 +62,8 @@ namespace Assets.Scripts.AnimalScriptLogic
                     return;
                 point = moveCloserToObject(point, closestElphant.point);
             }
-            CheckBounds();
+
+            Debug.Log("MOUSE OMG");
         }
 
         private Elephant getClosestElephant()

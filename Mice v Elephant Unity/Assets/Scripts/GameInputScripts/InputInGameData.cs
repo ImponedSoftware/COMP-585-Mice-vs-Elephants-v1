@@ -8,7 +8,7 @@ public class InputInGameData : MonoBehaviour
     public Button playButton;
     public InputField ColumnInput, RowInput, NumberOfMiceInput, NumberOfElephantInput, StrikeDistanceInput;
 
-    public static int row, coloum, numberOfElephants, numberOfMice;
+    public static int row, coloum, numberOfElephants, numberOfMice, strikeDistance;
     public bool GridSizeChangeRequested = false;
     // Start is called before the first frame update
     void Start()
