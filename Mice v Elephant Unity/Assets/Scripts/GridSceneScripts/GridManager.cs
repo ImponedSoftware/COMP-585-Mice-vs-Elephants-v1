@@ -47,7 +47,7 @@ public class GridManager : MonoBehaviour
         // put grid
         initGrid(_row, _coloum);
 
-        Debug.Log("After Init Grid");
+//Debug.Log("After Init Grid");
 
         elephants = new List<GameObject>();
         mice = new List<GameObject>();
@@ -55,7 +55,7 @@ public class GridManager : MonoBehaviour
         moveElephantsRandomly();
         moveMiceRandomly();
 
-        Debug.Log("After Move Elephant");
+       // Debug.Log("After Move Elephant");
 
     }
 
@@ -71,7 +71,7 @@ public class GridManager : MonoBehaviour
 
         GameObject refTile = (GameObject)Instantiate(Resources.Load("Elephant 1"));
 
-        Debug.Log("Num of Elephant: " + _numOfElephants);
+        //Debug.Log("Num of Elephant: " + _numOfElephants);
         
         for(int i = 0; i < _numOfElephants; i++)
         {
@@ -82,7 +82,7 @@ public class GridManager : MonoBehaviour
 
             int randomX = random.Next(0, _row);
             int randomY = random.Next(0, _coloum);
-            Debug.Log($"X: {randomX} --- Y: {randomY}");
+            //Debug.Log($"X: {randomX} --- Y: {randomY}");
 
             GameObject elephantTile = (GameObject)Instantiate(refTile, transform);
             elephants.Add(elephantTile);
@@ -109,7 +109,7 @@ public class GridManager : MonoBehaviour
 
             int randomX = random.Next(0, _row);
             int randomY = random.Next(0, _coloum);
-            Debug.Log($"X: {randomX} --- Y: {randomY}");
+            //Debug.Log($"X: {randomX} --- Y: {randomY}");
 
             GameObject miceTile = (GameObject)Instantiate(refTile, transform);
             mice.Add(miceTile);
@@ -149,24 +149,24 @@ public class GridManager : MonoBehaviour
        // Debug.Log(GridManager.elephants[currentElephantIndex].transform.position);
       // GridManager.elephants[currentElephantIndex].transform.position = new Vector3(pointX * GridManager.tileSpace, pointY * -GridManager.tileSpace, 1);
         
-        Vector3 pos = GridManager.elephants[currentElephantIndex].transform.position;
-                 if (pointX >= GridManager.gameObjRef.GetLength(0) - 1)
+        Vector3 pos = elephants[currentElephantIndex].transform.position;
+                 if (pointX >=gameObjRef.GetLength(0) - 1)
                 {
-                    pointX = GridManager.gameObjRef.GetLength(0) - 1;
+                    pointX = gameObjRef.GetLength(0) - 1;
                 }
 
-                if (pointY >= GridManager.gameObjRef.GetLength(1) - 1)
+                if (pointY >= gameObjRef.GetLength(1) - 1)
                 {
-                    pointY = GridManager.gameObjRef.GetLength(1) - 1;
+                    pointY = gameObjRef.GetLength(1) - 1;
                 }
 
 
-        
-            Vector3 fe = (gameObjRef[pointX, pointY]);
 
-            GridManager.elephants[currentElephantIndex].transform.position = new Vector3(fe.x, fe.y, fe.z);
+        Vector3 fe = (gameObjRef[pointX, pointY]);
+            //Debug.Log("OLD:" + pos);
+            elephants[currentElephantIndex].transform.position = new Vector3(fe.x, fe.y, fe.z);
+            //Debug.Log("NEW:" + elephants[currentElephantIndex].transform.position);
 
-              
     }
 
     public static void SyncCurrentPosToScenePosMice(int pointX, int pointY, int currentElephantIndex)
@@ -188,8 +188,9 @@ public class GridManager : MonoBehaviour
 
 
         Vector3 fe = (gameObjRef[pointX, pointY]);
-
+       // Debug.Log("OLD:" + pos);
         mice[currentElephantIndex].transform.position = new Vector3(fe.x, fe.y, fe.z);
+       // Debug.Log("NEW:" + mice[currentElephantIndex].transform.position);
     }
 
 

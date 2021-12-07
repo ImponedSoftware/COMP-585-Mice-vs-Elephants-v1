@@ -19,18 +19,18 @@ namespace Assets.Scripts.AnimalScriptLogic
 
         protected override void Run()
         {
-            Debug.Log("WERE fuckign runngin inside asdasdasd");
+           // Debug.Log("WERE fuckign runngin inside asdasdasd");
             while ((Interlocked.CompareExchange(ref elephantsAvailable, 0, 0)) > 0)
             {
                 Barrier();
-                Debug.Log("WERE fuckign runngin inside mouse");
+                //Debug.Log("WERE fuckign runngin inside mouse");
                 if ((Interlocked.CompareExchange(ref elephantsAvailable, 0, 0)) <= 0)
                     break;
 
                 MoveAround();
                 //print or set the mouse sprite at the spefic location on the graph.
                 Thread.Sleep(1000);
-                Debug.Log(this.point + " MMOO");
+                //Debug.Log(this.point + " MMOO");
                 SyncCurrentPosToScenePos(this);
             }
             // This is where mouse ternminates.
@@ -63,7 +63,7 @@ namespace Assets.Scripts.AnimalScriptLogic
                 point = moveCloserToObject(point, closestElphant.point);
             }
 
-            Debug.Log("MOUSE OMG");
+           // Debug.Log("MOUSE OMG");
         }
 
         private Elephant getClosestElephant()

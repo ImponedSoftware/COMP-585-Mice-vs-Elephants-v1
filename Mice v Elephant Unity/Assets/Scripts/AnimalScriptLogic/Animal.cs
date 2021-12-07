@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Drawing;
-using UnityEngine;
 using System;
+using UnityEngine;
 using System.IO;
 
 namespace Assets.Scripts.AnimalScriptLogic
@@ -18,6 +18,8 @@ namespace Assets.Scripts.AnimalScriptLogic
 
         public List<Mouse> mouseList;
         public List<Elephant> elephantList;
+
+        protected static System.Random rand = new System.Random();
 
         protected readonly int RowBound;
         protected readonly int ColoumBound;
@@ -55,11 +57,6 @@ namespace Assets.Scripts.AnimalScriptLogic
 
         }
 
- /*       protected void lol()
-        {
-            _objLock;
-        }*/
-
         protected abstract void Run();
 
         protected abstract void MoveAround();
@@ -71,9 +68,9 @@ namespace Assets.Scripts.AnimalScriptLogic
         {
             Monitor.Enter(_objLock);
             {
-                Debug.Log("Mouse");
+                //Debug.Log("Mouse");
                 Interlocked.Increment(ref allSqawnedObjects);
-                Debug.Log(mouseList.Count + elephantList.Count);
+                //Debug.Log(mouseList.Count + elephantList.Count);
                 if ((Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantList.Count) || (Interlocked.CompareExchange(ref elephantsAvailable, 0, 0)) <= 0)
                 {
 
@@ -88,7 +85,7 @@ namespace Assets.Scripts.AnimalScriptLogic
                     {
                         while (!interrupted)
                         {
-                            Debug.Log(this.thread.ManagedThreadId);
+                           // Debug.Log(this.thread.ManagedThreadId);
                             Monitor.Wait(_objLock);
                             interrupted = true;
                         }
@@ -125,13 +122,12 @@ namespace Assets.Scripts.AnimalScriptLogic
                 int y = animal.point.Y;
                 int currentElephantIndex = elephantList.IndexOf(animal);
 
-
                 //GridManager.SyncCurrentPosToScenePos(x, y, currentElephantIndex);
 
                 StartSimulation.syncContext.Post(_ =>
                 {
                     // This code here will run on the main thread
-                    Debug.Log("Hello from main thread! from elephant" + currentElephantIndex + " " + x + " " + y + " " + this.thread.ManagedThreadId);
+                    //Debug.Log("Hello from main thread! from elephant" + currentElephantIndex + " " + x + " " + y + " " + this.thread.ManagedThreadId);
                     GridManager.SetSimulationRoundText(roundTurn);
                     GridManager.SyncCurrentPosToScenePos(x, y, currentElephantIndex);
                 }, null);
@@ -148,13 +144,12 @@ namespace Assets.Scripts.AnimalScriptLogic
                 int y = animal.point.Y;
                 int currentElephantIndex = mouseList.IndexOf(animal);
 
-
                 //GridManager.SyncCurrentPosToScenePosMice(x, y, currentElephantIndex);
 
                 StartSimulation.syncContext.Post(_ =>
                 {
                     // This code here will run on the main thread
-                    Debug.Log("Hello from main thread! from mice" + currentElephantIndex + " " + x + " " + y + " " + this.thread.ManagedThreadId);
+                    //Debug.Log("Hello from main thread! from mice" + currentElephantIndex + " " + x + " " + y + " " + this.thread.ManagedThreadId);
                     GridManager.SetSimulationRoundText(roundTurn);
                     GridManager.SyncCurrentPosToScenePosMice(x, y, currentElephantIndex);
                 }, null);
@@ -228,17 +223,19 @@ namespace Assets.Scripts.AnimalScriptLogic
 
         protected Point moveInRandomAdijantSquare()
         {
-            Debug.Log("OMG");
-            System.Random rand = new System.Random();
+            //Debug.Log("OMG");
+            lock (rand){
 
-            int xOffset = rand.Next(-1, 2);
-            int yOffset = rand.Next(-1, 2);
+                int xOffset = rand.Next(-1, 2);
+                int yOffset = rand.Next(-1, 2);
 
-            Point result = new Point(this.point.X + xOffset, this.point.Y + yOffset);
-            Debug.Log(result);
-           // if(((result.X >= 0) && (result.Y >= 0)) && ((result.X <= ColoumBound) && (result.Y <= RowBound)))
-                return result;
-            //return this.point;
+                Debug.Log("Xof: " + xOffset + " Yof: " + yOffset + "Mice Or El: " + this.thread.ManagedThreadId);
+
+                Point result = new Point(this.point.X + xOffset, this.point.Y + yOffset);
+                //if(((result.X >= 0) && (result.Y >= 0)) && ((result.X <= ColoumBound) && (result.Y <= RowBound)))
+                    return result;
+                //return this.point;
+            }
         }
 
         protected Point moveCloserToObject(Point maximizeCloestDistance, Point pointInReference)
