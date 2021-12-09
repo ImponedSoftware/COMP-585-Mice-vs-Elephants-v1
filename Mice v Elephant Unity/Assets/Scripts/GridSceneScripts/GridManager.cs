@@ -149,7 +149,7 @@ public class GridManager : MonoBehaviour
        // Debug.Log(GridManager.elephants[currentElephantIndex].transform.position);
       // GridManager.elephants[currentElephantIndex].transform.position = new Vector3(pointX * GridManager.tileSpace, pointY * -GridManager.tileSpace, 1);
         
-        Vector3 pos = GridManager.elephants[currentElephantIndex].transform.position;
+        Vector3 pos = GridManager.elephants[currentElephantIndex].transform.position; // Array out of bounds array
                  if (pointX >= GridManager.gameObjRef.GetLength(0) - 1)
                 {
                     pointX = GridManager.gameObjRef.GetLength(0) - 1;

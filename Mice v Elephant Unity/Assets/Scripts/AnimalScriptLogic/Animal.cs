@@ -14,6 +14,8 @@ namespace Assets.Scripts.AnimalScriptLogic
 
         public object _objLock;
 
+        public static System.Random rand = new System.Random();
+
         protected Thread thread;
 
         public List<Mouse> mouseList;
@@ -52,13 +54,7 @@ namespace Assets.Scripts.AnimalScriptLogic
             thread.Start();
 
           //  this.endThreat();
-
         }
-
- /*       protected void lol()
-        {
-            _objLock;
-        }*/
 
         protected abstract void Run();
 
@@ -228,17 +224,18 @@ namespace Assets.Scripts.AnimalScriptLogic
 
         protected Point moveInRandomAdijantSquare()
         {
-            Debug.Log("OMG");
-            System.Random rand = new System.Random();
+              lock (rand){
 
-            int xOffset = rand.Next(-1, 2);
-            int yOffset = rand.Next(-1, 2);
+                int xOffset = rand.Next(-1, 2);
+                int yOffset = rand.Next(-1, 2);
 
-            Point result = new Point(this.point.X + xOffset, this.point.Y + yOffset);
-            Debug.Log(result);
-           // if(((result.X >= 0) && (result.Y >= 0)) && ((result.X <= ColoumBound) && (result.Y <= RowBound)))
-                return result;
-            //return this.point;
+                Debug.Log("Xof: " + xOffset + " Yof: " + yOffset + "Mice Or El: " + this.thread.ManagedThreadId);
+
+                Point result = new Point(this.point.X + xOffset, this.point.Y + yOffset);
+                //if(((result.X >= 0) && (result.Y >= 0)) && ((result.X <= ColoumBound) && (result.Y <= RowBound)))
+                    return result;
+                //return this.point;
+              }
         }
 
         protected Point moveCloserToObject(Point maximizeCloestDistance, Point pointInReference)
