@@ -31,9 +31,9 @@ namespace Assets.Scripts.AnimalScriptLogic
 
             while (running)
             {
-                //Debug.Log(this.point + " BEginnign EL");
+                Debug.Log(this.point + " BEginnign EL");
                 Barrier();
-                //Debug.Log("WERE fuckign runngin");
+                Debug.Log("WERE fuckign runngin");
 
                 if (running)
                 {
@@ -53,7 +53,7 @@ namespace Assets.Scripts.AnimalScriptLogic
                 elephantTurnFlag = !elephantTurnFlag;
                 //Print this or this is where we call the sprite to move to
                 Thread.Sleep(1000);
-                //Debug.Log(this.point + " El");
+                Debug.Log(this.point + " El");
                 SyncCurrentPosToScenePos(this);
             }
 
@@ -63,7 +63,7 @@ namespace Assets.Scripts.AnimalScriptLogic
         {
             Monitor.Enter(_objLock);
             {
-               // Debug.Log("Elphant111");
+                Debug.Log("Elphant111");
                 if (amountOfMiceOnSquare() >= 2)
                 {
                     isElephantEaten();
@@ -89,7 +89,7 @@ namespace Assets.Scripts.AnimalScriptLogic
                     {
                         while (!interrupted)
                         {
-                            //Debug.Log(this.thread.ManagedThreadId);
+                            Debug.Log(this.thread.ManagedThreadId);
                             Monitor.Wait(_objLock);
                             interrupted = true;
                         }
@@ -120,11 +120,11 @@ namespace Assets.Scripts.AnimalScriptLogic
             }
             else
             {
-                //Debug.Log(point + " INNN");
+                Debug.Log(point + " INNN");
                 point = moveInRandomAdijantSquare();
-                //Debug.Log(point + " OUt");
+                Debug.Log(point + " OUt");
             }
-            //Debug.Log("OMG ITS WORKING");
+            Debug.Log("OMG ITS WORKING");
             //CheckBounds();
         }
 

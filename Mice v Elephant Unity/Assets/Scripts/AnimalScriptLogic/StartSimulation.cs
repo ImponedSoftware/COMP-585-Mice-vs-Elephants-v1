@@ -66,7 +66,7 @@ namespace Assets.Scripts.AnimalScriptLogic
                     int y = -(int)pos.y;
 
                     elephantList.Add(new Elephant(mouseList, elephantList, _objLock, numberOElephants, rowBound, coloumBound, strikeDistance, new Point(x, y)));
-                    //Debug.Log(elephantList.Count + " lds;lfk;sdlfk");
+                    Debug.Log(elephantList.Count + " lds;lfk;sdlfk");
                 }
 
                 foreach (GameObject miObj in GridManager.mice)
@@ -77,7 +77,7 @@ namespace Assets.Scripts.AnimalScriptLogic
                     int y = -(int)pos.y;
 
                     mouseList.Add(new Mouse(mouseList, elephantList, _objLock, numberOElephants, rowBound, coloumBound, strikeDistance, new Point(x, y)));
-                    //Debug.Log(mouseList.Count + "moomomom");
+                    Debug.Log(mouseList.Count + "moomomom");
                     /* if (x >= GridManager.gameObjRef.GetLength(0) - 1)
                      {
                          x = GridManager.gameObjRef.GetLength(0) - 1;
