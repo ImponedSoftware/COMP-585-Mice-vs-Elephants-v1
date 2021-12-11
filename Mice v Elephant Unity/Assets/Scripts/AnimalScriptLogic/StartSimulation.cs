@@ -40,6 +40,8 @@ namespace Assets.Scripts.AnimalScriptLogic
 
             numberOElephants = InputInGameData.numberOfElephants;
             numberOfMouse = InputInGameData.numberOfMice;
+            rowBound = InputInGameData.row;
+            coloumBound = InputInGameData.coloum;
 
             strikeDistance = InputInGameData.strikeDistance;
 
@@ -48,8 +50,8 @@ namespace Assets.Scripts.AnimalScriptLogic
 
         public void startSimulation()
         {
-            Debug.Log(GridManager.elephants.Count);
-            Debug.Log(GridManager.mice.Count);
+            //Debug.Log(GridManager.elephants.Count);
+            //Debug.Log(GridManager.mice.Count);
 
             startButton.SetActive(false);
             scatterButton.SetActive(false);
@@ -77,7 +79,7 @@ namespace Assets.Scripts.AnimalScriptLogic
                     int y = -(int)pos.y;
 
                     mouseList.Add(new Mouse(mouseList, elephantList, _objLock, numberOElephants, rowBound, coloumBound, strikeDistance, new Point(x, y)));
-                    //Debug.Log(mouseList.Count + "moomomom");
+           
                     /* if (x >= GridManager.gameObjRef.GetLength(0) - 1)
                      {
                          x = GridManager.gameObjRef.GetLength(0) - 1;
@@ -88,7 +90,7 @@ namespace Assets.Scripts.AnimalScriptLogic
                          y = GridManager.gameObjRef.GetLength(1) - 1;
                      }
 
-     *//*
+     
                      Vector3 fe = (GridManager.gameObjRef[x,y]);
                      eleObj.transform.position = new Vector3(fe.x, fe.y, fe.z);
 
@@ -99,7 +101,16 @@ namespace Assets.Scripts.AnimalScriptLogic
              
             }
             Monitor.Exit(_objLock);
-            Debug.Log(mouseList.Count + elephantList.Count + " " +_objLock);
+/*
+            foreach (Mouse mice in mouseList)
+            {
+                mice.thread.Join();
+            }
+
+            foreach (Elephant elephant in elephantList)
+            {
+                elephant.thread.Join();
+            }*/
         }
     }
 }

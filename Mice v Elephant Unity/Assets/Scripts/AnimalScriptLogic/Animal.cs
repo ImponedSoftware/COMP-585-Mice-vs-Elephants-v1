@@ -14,25 +14,26 @@ namespace Assets.Scripts.AnimalScriptLogic
 
         public object _objLock;
 
-        protected Thread thread;
+        public Thread thread;
 
         public List<Mouse> mouseList;
         public List<Elephant> elephantList;
 
         protected static System.Random rand = new System.Random();
 
-        protected readonly int RowBound;
-        protected readonly int ColoumBound;
- 
-        protected readonly int StrikeDistance;
+        protected int RowBound;
+        protected int ColoumBound;
 
-        protected int elephantsAvailable;
+        protected readonly int StrikeDistance;
+        protected static int elephantListCount;
+
+        protected static int elephantsAvailable;
         protected static int roundTurn = 0;
         protected static int allSqawnedObjects = 0;
 
-        protected readonly int[,] checkCellIndcies = new int[,] { {-1, -1}, { 0, -1}, { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, 1 }, { -1, 1 }, { -1, -0} };
+        protected static int[,] checkCellIndcies = new int[,] { { -1, -1 }, { 0, -1 }, { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, 1 }, { -1, 1 }, { -1, -0 } };
 
-        public Animal(List<Mouse> mouseList, List<Elephant> elephantList, object _objLock, int elephantsAvailable, int RowBound, int ColoumBound, int StrikeDistance, Point point)
+        public Animal(List<Mouse> mouseList, List<Elephant> elephantList, object _objLock, int elephantsAvailables, int RowBound, int ColoumBound, int StrikeDistance, Point point)
         {
 
             this.mouseList = mouseList;
@@ -40,20 +41,20 @@ namespace Assets.Scripts.AnimalScriptLogic
 
             this._objLock = _objLock;
 
-            this.elephantsAvailable = elephantsAvailable;
+            elephantsAvailable = elephantsAvailables;
 
             this.RowBound = RowBound;
             this.ColoumBound = ColoumBound;
             this.StrikeDistance = StrikeDistance;
-
+            elephantListCount = elephantList.Count;
             this.point = point;
 
-            Debug.Log(mouseList.Count + elephantList.Count);
+            //Debug.Log(mouseList.Count + elephantList.Count);
 
             this.thread = new Thread(new ThreadStart(this.Run));
             thread.Start();
 
-          //  this.endThreat();
+            //  this.endThreat();
 
         }
 
@@ -71,7 +72,8 @@ namespace Assets.Scripts.AnimalScriptLogic
                 //Debug.Log("Mouse");
                 Interlocked.Increment(ref allSqawnedObjects);
                 //Debug.Log(mouseList.Count + elephantList.Count);
-                if ((Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantList.Count) || (Interlocked.CompareExchange(ref elephantsAvailable, 0, 0)) <= 0)
+                Debug.Log((Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantListCount));
+                if ((Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantListCount) || (Interlocked.CompareExchange(ref elephantsAvailable, 0, 0)) <= 0)
                 {
 
                     Monitor.PulseAll(_objLock);
@@ -85,7 +87,7 @@ namespace Assets.Scripts.AnimalScriptLogic
                     {
                         while (!interrupted)
                         {
-                           // Debug.Log(this.thread.ManagedThreadId);
+                            Debug.Log("MIC: " + this.thread.ManagedThreadId);
                             Monitor.Wait(_objLock);
                             interrupted = true;
                         }
@@ -101,35 +103,26 @@ namespace Assets.Scripts.AnimalScriptLogic
             Monitor.Exit(_objLock);
         }
 
-        private void endThreat()
-        {
-            foreach(Mouse mice in mouseList)
-            {
-                mice.thread.Join();
-            }
 
-            foreach (Elephant elephant in elephantList)
-            {
-                elephant.thread.Join();
-            }
-        }
-
-        protected void SyncCurrentPosToScenePos(Elephant animal) 
+        protected void SyncCurrentPosToScenePos(Elephant animal)
         {
             Monitor.Enter(elephantList);
             {
+                animal.CheckBounds();
                 int x = animal.point.X;
                 int y = animal.point.Y;
                 int currentElephantIndex = elephantList.IndexOf(animal);
+
+
 
                 //GridManager.SyncCurrentPosToScenePos(x, y, currentElephantIndex);
 
                 StartSimulation.syncContext.Post(_ =>
                 {
-                    // This code here will run on the main thread
-                    //Debug.Log("Hello from main thread! from elephant" + currentElephantIndex + " " + x + " " + y + " " + this.thread.ManagedThreadId);
+
                     GridManager.SetSimulationRoundText(roundTurn);
                     GridManager.SyncCurrentPosToScenePos(x, y, currentElephantIndex);
+
                 }, null);
             }
             Monitor.Exit(elephantList);
@@ -140,58 +133,40 @@ namespace Assets.Scripts.AnimalScriptLogic
         {
             Monitor.Enter(mouseList);
             {
+                animal.CheckBounds();
                 int x = animal.point.X;
                 int y = animal.point.Y;
                 int currentElephantIndex = mouseList.IndexOf(animal);
 
                 //GridManager.SyncCurrentPosToScenePosMice(x, y, currentElephantIndex);
 
-                StartSimulation.syncContext.Post(_ =>
+                if (x != -1 && y != -1)
                 {
-                    // This code here will run on the main thread
-                    //Debug.Log("Hello from main thread! from mice" + currentElephantIndex + " " + x + " " + y + " " + this.thread.ManagedThreadId);
-                    GridManager.SetSimulationRoundText(roundTurn);
-                    GridManager.SyncCurrentPosToScenePosMice(x, y, currentElephantIndex);
-                }, null);
+                    StartSimulation.syncContext.Post(_ =>
+                    {
+                        // This code here will run on the main thread
+                        //Debug.Log("Hello from main thread! from mice" + currentElephantIndex + " " + x + " " + y + " " + this.thread.ManagedThreadId);
+
+                        GridManager.SetSimulationRoundText(roundTurn);
+                        GridManager.SyncCurrentPosToScenePosMice(x, y, currentElephantIndex);
+
+                    }, null);
+                }
             }
             Monitor.Exit(mouseList);
             //GridManager.mice[currentMouseIndex].transform.position = new Vector3(x * GridManager.tileSpace, y * -GridManager.tileSpace, 1);
         }
 
-        protected void deleteMouse(Mouse mouse)
-        {
-            this.mouseList.Remove(mouse);
-
-            int currentMouseIndex = mouseList.IndexOf(mouse);
-
-            GameObject.Destroy(GridManager.mice[currentMouseIndex]);
-        }
-
-        protected void deleteelephant(Elephant elephant)
-        {
-            this.elephantList.Remove(elephant);
-
-            int currentMouseIndex = elephantList.IndexOf(elephant);
-
-            GameObject.Destroy(GridManager.elephants[currentMouseIndex]); 
-        }
-
-        protected Point getRandomPoint()
-        {
-            System.Random rand = new System.Random();
-            return new Point(rand.Next(RowBound, ColoumBound + 1)); //ColoumBound + 1 beacsue its RowBound <= value < ColoumBound, so we have to add a 1 to ColoumBound.
-        }
-
         protected int getDistanceBetweenTwoPoints(Point pointOne, Point pointTwo)
         {
-            if(isDiagonal(pointOne, pointTwo))
+            if (isDiagonal(pointOne, pointTwo))
                 return getDiagonalDistance(pointOne, pointTwo);
             return distanceFormula(pointOne, pointTwo);
         }
 
         private int distanceFormula(Point pointOne, Point pointTwo)
         {
-            return (int) Math.Sqrt((Math.Pow((pointTwo.X - pointOne.X), 2)) + (Math.Pow((pointTwo.Y - pointOne.Y), 2)));
+            return (int)Math.Sqrt((Math.Pow((pointTwo.X - pointOne.X), 2)) + (Math.Pow((pointTwo.Y - pointOne.Y), 2)));
         }
 
         protected bool isDiagonal(Point pointOne, Point pointTwo)
@@ -224,16 +199,17 @@ namespace Assets.Scripts.AnimalScriptLogic
         protected Point moveInRandomAdijantSquare()
         {
             //Debug.Log("OMG");
-            lock (rand){
+            lock (rand)
+            {
 
                 int xOffset = rand.Next(-1, 2);
                 int yOffset = rand.Next(-1, 2);
 
-                Debug.Log("Xof: " + xOffset + " Yof: " + yOffset + "Mice Or El: " + this.thread.ManagedThreadId);
+                //Debug.Log("Xof: " + xOffset + " Yof: " + yOffset + "Mice Or El: " + this.thread.ManagedThreadId);
 
                 Point result = new Point(this.point.X + xOffset, this.point.Y + yOffset);
                 //if(((result.X >= 0) && (result.Y >= 0)) && ((result.X <= ColoumBound) && (result.Y <= RowBound)))
-                    return result;
+                return result;
                 //return this.point;
             }
         }
@@ -246,23 +222,32 @@ namespace Assets.Scripts.AnimalScriptLogic
             int closestDistanceToObject;
             int closestPointInReferneceDistance = int.MaxValue;
 
-           for(int i = 0; i < checkCellIndcies.Length; i++)
+
+            if (this.point.X == -1 && this.point.Y == -1)
+            {
+                Debug.Log($"this object is 'dead'");
+                return this.point;
+            }
+
+            for (int i = 0; i < (checkCellIndcies.GetLength(0) - 1); i++)
             {
                 tempPoint = new Point(maximizeCloestDistance.X, maximizeCloestDistance.Y);
+
+                Debug.Log(i + " " + (checkCellIndcies.GetLength(0) - 1));
 
                 tempPoint.X += checkCellIndcies[i, 0];
                 tempPoint.Y += checkCellIndcies[i, 1];
 
                 closestDistanceToObject = getDistanceBetweenTwoPoints(tempPoint, pointInReference);
 
-                if(closestDistanceToObject == 0)
+                if (closestDistanceToObject == 0)
                 {
                     closestPointInReferneceDistance = closestDistanceToObject;
                     returnClosestPointInReferneceDistance = new Point(tempPoint.X, tempPoint.Y);
                     return returnClosestPointInReferneceDistance;
                 }
 
-                else if(closestDistanceToObject < closestPointInReferneceDistance)
+                else if (closestDistanceToObject < closestPointInReferneceDistance)
                 {
                     closestPointInReferneceDistance = closestDistanceToObject;
                     returnClosestPointInReferneceDistance = new Point(tempPoint.X, tempPoint.Y);
@@ -274,14 +259,32 @@ namespace Assets.Scripts.AnimalScriptLogic
         // If point goes out of bounds, then set it to the respected value;
         public void CheckBounds()
         {
-            if (this.point.X > ColoumBound)
-                this.point.X = ColoumBound;
-            if (this.point.X < 0)
-                this.point.X = 0;
-            if (this.point.Y > RowBound)
-                this.point.Y = RowBound;
-            if (this.point.Y < 0)
-                this.point.Y = 0;
+            Debug.Log("IN CHECK: " + this.thread.ManagedThreadId + " " + this.point.X + " " + this.point.Y);
+            if (this.point.X == -1 && this.point.Y == -1)
+            {
+                Debug.Log($"this object is 'dead'");
+            }
+            else
+            {
+                if (this.point.X > RowBound - 1)
+                {
+                    this.point.X = RowBound - 1;
+                }
+                if (this.point.X < 0)
+                {
+                    this.point.X = 0;
+                }
+                if (this.point.Y > ColoumBound - 1)
+                {
+                    this.point.Y = ColoumBound - 1;
+                }
+                if (this.point.Y < 0)
+                {
+                    this.point.Y = 0;
+                }
+
+                Debug.Log("OUT CHECK: " + this.thread.ManagedThreadId + " " + this.point.X + " " + this.point.Y);
+            }
         }
 
         //Overide To String????

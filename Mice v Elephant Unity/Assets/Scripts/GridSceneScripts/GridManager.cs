@@ -142,23 +142,23 @@ public class GridManager : MonoBehaviour
             }
         }
         Destroy(refTile);
+        Debug.Log($"GAMEREF: {gameObjRef.GetLength(0) - 1} {gameObjRef.GetLength(1) - 1}");
     }
 
     public static void SyncCurrentPosToScenePos(int pointX, int pointY, int currentElephantIndex)
     {
-       // Debug.Log(GridManager.elephants[currentElephantIndex].transform.position);
-      // GridManager.elephants[currentElephantIndex].transform.position = new Vector3(pointX * GridManager.tileSpace, pointY * -GridManager.tileSpace, 1);
-        
+
         Vector3 pos = elephants[currentElephantIndex].transform.position;
                  if (pointX >=gameObjRef.GetLength(0) - 1)
                 {
-                    pointX = gameObjRef.GetLength(0) - 1;
+                    pointX = gameObjRef.GetLength(0) - 2;
                 }
 
                 if (pointY >= gameObjRef.GetLength(1) - 1)
                 {
-                    pointY = gameObjRef.GetLength(1) - 1;
+                    pointY = gameObjRef.GetLength(1) - 2;
                 }
+
 
 
 
@@ -175,14 +175,27 @@ public class GridManager : MonoBehaviour
             GridManager.mice[currentElephantIndex].transform.position = new Vector3(pointX * GridManager.tileSpace, pointY * -GridManager.tileSpace, 1);*/
 
         Vector3 pos = mice[currentElephantIndex].transform.position;
+
+        Debug.Log($"{pointX} {pointY} {gameObjRef.GetLength(0)-1} {gameObjRef.GetLength(1)-1}");
+       
         if (pointX >= gameObjRef.GetLength(0) - 1)
         {
-            pointX = gameObjRef.GetLength(0) - 1;
+            pointX = gameObjRef.GetLength(0) - 2;
         }
 
         if (pointY >= gameObjRef.GetLength(1) - 1)
         {
-            pointY = gameObjRef.GetLength(1) - 1;
+            pointY = gameObjRef.GetLength(1) - 2;
+        }
+
+        if (pointX < 0)
+        {
+            pointX = 0;
+        }
+
+        if (pointY < 0)
+        {
+            pointY = 0;
         }
 
 
@@ -194,6 +207,19 @@ public class GridManager : MonoBehaviour
     }
 
 
+    public static void DestoryElephant(int index)
+    {
+        Debug.Log("Destorying Ele: " + index);
+        Destroy(elephants[index]);
+       
+    }
+
+    public static void DestoryMice(int index)
+    {
+        //Debug.Log("Destorying Ele: " + index);
+        Destroy(mice[index]);
+
+    }
 
     public static void SetSimulationRoundText(int round)
     {

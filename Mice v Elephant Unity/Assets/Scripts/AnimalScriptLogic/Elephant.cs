@@ -54,7 +54,30 @@ namespace Assets.Scripts.AnimalScriptLogic
                 //Print this or this is where we call the sprite to move to
                 Thread.Sleep(1000);
                 //Debug.Log(this.point + " El");
-                SyncCurrentPosToScenePos(this);
+
+                if (running)
+                {
+                    SyncCurrentPosToScenePos(this);
+                }
+                else
+                {
+                    //Debug.Log($"{ mouseList.Count + elephantListCount} {(Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantListCount)} {allSqawnedObjects}");
+                    Debug.Log("Not call");
+
+                
+
+                    foreach(Mouse mice in mouseList)
+                    {
+                        Debug.Log("Mice thread alive: " + mice.thread.IsAlive);
+                    }
+
+
+                    foreach (Elephant elephant in elephantList)
+                    {
+                        Debug.Log("Ele thread alive: " + elephant.thread.IsAlive);
+                    }
+                }
+              
             }
 
         }
@@ -68,15 +91,27 @@ namespace Assets.Scripts.AnimalScriptLogic
                 {
                     isElephantEaten();
                     running = false;
-                    return;
+                    //Debug.Log(running + " running");
+                    // Debug.Log("EL " + elephantList.Count);
+                    this.point.X = -1;
+                    this.point.Y = -1;
+                    elephantListCount -= 1;
+                    //Debug.Log("EL " + elephantListCount + " " + ((Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantListCount)));
+                    if ((Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantListCount))
+                    {
+                        Monitor.PulseAll(_objLock);
+                        Interlocked.Increment(ref roundTurn);
+                        Interlocked.Exchange(ref allSqawnedObjects, 0);
+                    }
+
                 }
 
                 Interlocked.Increment(ref allSqawnedObjects);
 
-                Debug.Log(allSqawnedObjects);
-                Debug.Log((Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantList.Count) + " pghkljoghkj");
-
-                if ((Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantList.Count))
+                //Debug.Log(allSqawnedObjects);
+                //Debug.Log((Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantList.Count) + " pghkljoghkj");
+                //Debug.Log((Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantList.Count));
+                if ((Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantListCount))
                 {
                     Monitor.PulseAll(_objLock);
                     Interlocked.Increment(ref roundTurn);
@@ -111,6 +146,7 @@ namespace Assets.Scripts.AnimalScriptLogic
 
             if (amountOfMiceOnMySquare == 1)
             {
+                
                 mouseShotAway();
                 point = moveInRandomAdijantSquare();
             }
@@ -125,35 +161,54 @@ namespace Assets.Scripts.AnimalScriptLogic
                 //Debug.Log(point + " OUt");
             }
             //Debug.Log("OMG ITS WORKING");
-            //CheckBounds();
+            this.CheckBounds();
         }
 
         private void isElephantEaten()
         {
-            lock (elephantList) // MAYBE lock on the this
+            Monitor.Enter(elephantList);// MAYBE lock on the this
             {
                 Interlocked.Decrement(ref elephantsAvailable);
-
-                if (Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == ((mouseList.Count + elephantList.Count) - 1) || (Interlocked.CompareExchange(ref elephantsAvailable, 0, 0) <= 0))
+              
+                //elephantList[elephantList.IndexOf(this)].thread.Join();
+                Debug.Log("THIS IS IN EATENEL:" +(Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == mouseList.Count + elephantList.Count) + " AllS " + allSqawnedObjects);
+                if (Interlocked.CompareExchange(ref allSqawnedObjects, 0, 0) == ((mouseList.Count + elephantListCount) - 1) || (Interlocked.CompareExchange(ref elephantsAvailable, 0, 0) <= 0))
                 {
+                    Debug.Log("This El is eaten inside to release");
                     Monitor.PulseAll(_objLock);
                     Interlocked.Increment(ref roundTurn);
                     Interlocked.Exchange(ref allSqawnedObjects, 0);
+                   
                 }
 
-                elephantList.Remove(this);
+                int index = elephantList.IndexOf(this);
+                Debug.Log("This El is eaten " + index);
+       
+
+                StartSimulation.syncContext.Post(_ =>
+                {
+                    //Debug.Log(elephantList.IndexOf(this));//
+                    GridManager.DestoryElephant(index);
+                }, null);
+               // GridManager.DestoryElephant(elephantList.IndexOf(this));               
+                //elephantList.Remove(this);
+                //lephantList.Remove(this);
+
+                Debug.Log(elephantsAvailable);
                 // want to problemley remove the specfic gameobject
             }
+            Monitor.Exit(elephantList);
         }
 
         private void mouseShotAway()
         {
             System.Random rand = new System.Random();
 
-            int randIndcies = rand.Next(0, checkCellIndcies.Length + 1);
+            int randIndcies = rand.Next(0, (checkCellIndcies.GetLength(0)));
 
             int xDirection = checkCellIndcies[randIndcies, 0];
             int yDirection = checkCellIndcies[randIndcies, 1];
+
 
             lock (mouseList)
             {
@@ -161,7 +216,7 @@ namespace Assets.Scripts.AnimalScriptLogic
                 {
                     if (mice.point.Equals(this.point))
                     {
-                        mice.point = new Point((mice.point.X + (StrikeDistance * 2 * xDirection)), (mice.point.Y + (StrikeDistance * 2 * yDirection)));
+                        mice.point = new Point((mice.point.X + (StrikeDistance * xDirection) * 2), (mice.point.Y + (StrikeDistance * yDirection) * 2));
                         mice.CheckBounds();
                     }
                 }
@@ -203,12 +258,11 @@ namespace Assets.Scripts.AnimalScriptLogic
             Point returnFarthestDistanceToObject;
 
 
+            Debug.Log($"{minimizeClosestDistance} {pointInReference}");
 
-
-            for (int i = 0; i < checkCellIndcies.Length; i++)
+            for (int i = 0; i < (checkCellIndcies.GetLength(0) - 1); i++)
             {
                 checkTempPoint = new Point(minimizeClosestDistance.X, minimizeClosestDistance.Y);
-
                 checkTempPoint.X += checkCellIndcies[i, 0];
                 checkTempPoint.Y += checkCellIndcies[i, 1];
 

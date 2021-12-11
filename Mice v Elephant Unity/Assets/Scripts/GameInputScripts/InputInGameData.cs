@@ -24,18 +24,20 @@ public class InputInGameData : MonoBehaviour
 
     public void initGameData()
     {
-        int numberOfMice, numberOfElephants, strikeDistance;
+        //int numberOfMice, numberOfElephants, strikeDistance;
 
         Debug.Log($"{RowInput.text} {ColumnInput.text} {NumberOfMiceInput.text} {NumberOfElephantInput.text} {StrikeDistanceInput.text}");
 
 
         int.TryParse(RowInput.text, out row);
         int.TryParse(ColumnInput.text, out coloum);
+  
 
-        InputInGameData.numberOfElephants = int.Parse(NumberOfElephantInput.text);
-        InputInGameData.numberOfMice = int.Parse(NumberOfMiceInput.text);
+        numberOfElephants = int.Parse(NumberOfElephantInput.text);
+        numberOfMice = int.Parse(NumberOfMiceInput.text);
+        strikeDistance = int.Parse(StrikeDistanceInput.text);
 
-        Debug.Log($"{row} {coloum}");
+        Debug.Log($"{row} {coloum} {numberOfMice} {numberOfElephants} {strikeDistance}");
     }
     
 }

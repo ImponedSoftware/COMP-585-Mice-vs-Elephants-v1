@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "406360252037",
+    "project_id": "mice-eccd1",
+    "storage_bucket": "mice-eccd1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406360252037:android:16647680f489f1147913ec",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.Test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "406360252037-i68ghuhk8tmahara6mabk7ksmk6bp7f9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJlIAwADsj47s09Habt5b24xs3sKKRgEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "406360252037-i68ghuhk8tmahara6mabk7ksmk6bp7f9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
