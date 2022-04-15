@@ -87,7 +87,7 @@ namespace Assets.Scripts.AnimalScriptLogic
                     {
                         while (!interrupted)
                         {
-                            Debug.Log("MIC: " + this.thread.ManagedThreadId);
+                            Debug.Log("Curr thread: " + this.thread.ManagedThreadId);
                             Monitor.Wait(_objLock);
                             interrupted = true;
                         }
