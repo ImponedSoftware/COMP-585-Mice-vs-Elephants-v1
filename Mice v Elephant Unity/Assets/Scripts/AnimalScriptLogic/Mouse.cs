@@ -19,14 +19,13 @@ namespace Assets.Scripts.AnimalScriptLogic
 
         protected override void Run()
         {
-           // Debug.Log("WERE fuckign runngin inside asdasdasd");
+           // Debug.Log("The mice are running");
             while ((Interlocked.CompareExchange(ref elephantsAvailable, 0, 0)) > 0)
             {
                 Barrier();
                 Debug.Log(elephantsAvailable + " " + ((Interlocked.CompareExchange(ref elephantsAvailable, 0, 0)) <= 0));
                 if ((Interlocked.CompareExchange(ref elephantsAvailable, 0, 0)) <= 0)
                 {
-                    Debug.Log("MOUSE IS BREAKING");
 
                     int index = mouseList.IndexOf(this);
 
@@ -42,7 +41,7 @@ namespace Assets.Scripts.AnimalScriptLogic
                 MoveAround();
                 //print or set the mouse sprite at the spefic location on the graph.
                 Thread.Sleep(1000);
-                //Debug.Log(this.point + " MMOO");
+                //Debug.Log(this.point + "test");
                 SyncCurrentPosToScenePos(this);
             }
             // This is where mouse ternminates.
